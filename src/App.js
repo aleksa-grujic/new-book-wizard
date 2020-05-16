@@ -1,24 +1,17 @@
 import React from 'react';
-import logo from './logo.svg';
+import Container from '@material-ui/core/Container';
+import Paper from '@material-ui/core/Paper';
 import './App.css';
+import WizardContainer from "./components/wizard-container";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Container maxWidth="sm">
+          <Paper elevation={3} style={{marginTop: '40px', padding: '20px'}}>
+              <WizardContainer />
+          </Paper>
+      </Container>
     </div>
   );
 }

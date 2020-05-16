@@ -1,38 +1,58 @@
-.App {
+.progressbar {
+  counter-reset: step;
+  padding: 0;
+  margin: auto;
+}
+.progressbar li {
+  list-style: none;
+  display: inline-block;
+  position: relative;
   text-align: center;
+  cursor: pointer;
+}
+.progressbar li:first-child:nth-last-child(3),
+.progressbar li:first-child:nth-last-child(3) ~ li {
+  width: 30.33%;
+}
+.progressbar li:first-child:nth-last-child(4),
+.progressbar li:first-child:nth-last-child(4) ~ li {
+  width: 25%;
+}
+.progressbar li:before {
+  content: counter(step);
+  counter-increment: step;
+  width: 30px;
+  height: 30px;
+  line-height : 30px;
+  border: 1px solid #ddd;
+  border-radius: 100%;
+  display: block;
+  text-align: center;
+  margin: 0 auto 10px auto;
+  background-color: #fff;
+}
+.progressbar li.other:before {
+  content: "...";
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.progressbar li:after {
+  content: "";
+  position: absolute;
+  width: 70%;
+  height: 1px;
+  background-color: #ddd;
+  top: 15px;
+  left: -35%;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.progressbar li:first-child:after {
+  content: none;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.progressbar li.active {
+  color: green;
 }
-
-.App-link {
-  color: #61dafb;
+.progressbar li.active:before {
+  border-color: green;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.progressbar li.active + li:after {
+  background-color: green;
 }
