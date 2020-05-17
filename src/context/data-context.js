@@ -6,21 +6,25 @@ export const DataContext = createContext({});
 export default function DataContextProvider({children}) {
     const [data, setData] = useState(Data);
 
-    const addSubgenre = (genreId, subgenreName, isDescriptionRequired) => {
-        let subgenre = {
-            id: data.genres[data.genres.length - 1].subgenres[data.genres[data.genres.length - 1].subgenres.length - 1].id + 1,
-            name: subgenreName,
-            isDescriptionRequired: isDescriptionRequired
-        };
-
+    const addSubgenre = (genreId, subgenre) => {
         data.genres
             .find((genre) => genre.id === genreId).subgenres
             .push(subgenre);
-
         setData(data);
     };
 
-    return <DataContext.Provider value={{data, setData, addSubgenre}}>
+    const changeSubgenre = (genreId, subgenre) => {
+        data.genres
+            .find(genre => genre.id === genreId).subgenres
+            .map(item => {
+                if (item.id === subgenre.id) {
+                   Object.assign(item, subgenre)
+                }
+            });
+         setData(data);
+    };
+
+    return <DataContext.Provider value={{data, setData, addSubgenre, changeSubgenre}}>
         {children}
     </DataContext.Provider>
 }

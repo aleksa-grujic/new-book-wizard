@@ -3,34 +3,46 @@ import Button from "@material-ui/core/Button";
 import {makeStyles} from "@material-ui/core/styles";
 import {BookContext} from "../context/book-context";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
+    root: {
+        textAlign: 'right',
+    },
     backButton: {
-        marginRight: theme.spacing(1),
-    },
-    instructions: {
-        marginTop: theme.spacing(1),
-        marginBottom: theme.spacing(1),
-    },
-}));
+        marginRight: '15px',
+    }
+});
 export default function StepNavigation() {
     const classes = useStyles();
     const {bookProps, steps, handleReset, handleBack, handleNext} = useContext(BookContext);
 
     const isNextDisabled = () => {
-        switch (bookProps.activeStep) {
-            case 0 :
-                return !bookProps.genre;
-            case 1 :
-                if (bookProps.subgenre) {
+        switch (steps[bookProps.activeStep]) {
+            case 'Genre' :
+                return !bookProps.genreId;
+            case 'Subgenre' :
+                if (bookProps.subgenreId) {
                     return false;
                 }
                 return !bookProps.newSubgenre;
+            case 'Informations' :
+                return !(
+                    bookProps.bookTitle.length > 0 &&
+                    bookProps.author.length > 0 &&
+                    bookProps.publisher.length > 0 &&
+                    bookProps.datePublished.length > 0 &&
+                    bookProps.numberOfPages > 0 &&
+                    bookProps.format.length > 0 &&
+                    bookProps.edition.length > 0 &&
+                    bookProps.editionLanguage.length > 0 &&
+                    (bookProps.isDescriptionRequired ? bookProps.description.length > 0 : true)
+                )
+
             default : return false;
         }
     }
 
     return (
-            <div>
+            <div className={classes.root}>
             {bookProps.activeStep === steps.length ? (
                 <div>
                     <Button onClick={handleReset}>Reset</Button>

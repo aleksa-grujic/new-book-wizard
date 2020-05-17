@@ -7,28 +7,31 @@ import {DataContext} from "../../context/data-context";
 
 export default function NewSubgenre() {
     const {bookProps, setBookProps} = useContext(BookContext);
-    const {data, addSubgenre} = useContext(DataContext);
+    const {data, addSubgenre, changeSubgenre} = useContext(DataContext);
+
+    const findSubgenre = () => {
+        let genre = data.genres.find(genre => genre.id === bookProps.genreId);
+        return genre.subgenres.find(subgenre => subgenre.id === bookProps.subgenreId);
+    };
+
     const [subgenre, setSubgenre] = useState({
-        id: data.genres[data.genres.length - 1].subgenres[data.genres[data.genres.length - 1].subgenres.length - 1].id + 1,
-        name: "",
-        isDescriptionRequired: false
+        id: bookProps.subgenreId || data.genres[data.genres.length - 1].subgenres[data.genres[data.genres.length - 1].subgenres.length - 1].id + 1,
+        name: bookProps.subgenreId ? findSubgenre().name : "",
+        isDescriptionRequired: bookProps.subgenreId ? findSubgenre().isDescriptionRequired : false,
     });
 
+
+
     useEffect(() => {
-        console.log("11testt!", subgenre.name.length);
-        return function () {
-            if (subgenre.name.length > 0) {
-                console.log("fasdfsadfaas", subgenre.name.length);
-                addSubgenre(bookProps.genre, subgenre.name, subgenre.isDescriptionRequired);
-                setBookProps({...bookProps, subgenre: subgenre.id});
-                setSubgenre({
-                    id: data.genres[data.genres.length - 1].subgenres[data.genres[data.genres.length - 1].subgenres.length - 1].id + 1,
-                    name: "",
-                    isDescriptionRequired: false
-                });
+        if (subgenre.name.length > 0) {
+            if (findSubgenre()) {
+                changeSubgenre(bookProps.genreId, subgenre);
+            } else {
+                addSubgenre(bookProps.genreId, subgenre);
+                setBookProps({...bookProps, subgenreId: subgenre.id, isDescriptionRequired: subgenre.isDescriptionRequired});
             }
         }
-    }, [])
+    })
 
     return (
         <div style={{margin: '10px'}}>
@@ -36,7 +39,7 @@ export default function NewSubgenre() {
                 fullWidth
                 id="newSubgenreName"
                 label="Subgenre name"
-                variant="filled"
+                variant="filled"variant="filled"
                 value={subgenre.name}
                 onChange={(e) => {
                     setSubgenre({...subgenre, name: e.target.value})
